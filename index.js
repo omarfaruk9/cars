@@ -133,6 +133,37 @@ async function run() {
             res.json(result);
         })
 
+        // make admin 
+        app.put('/makeadmin/:email', async (req, res) => {
+            const email = req.params.email;
+            const filter = { email: email };
+            const doc = {
+                $set: {
+                    role: "admin"
+                }
+            }
+            const result = await usersCollection.updateOne(filter, doc);
+            res.json(result);
+        })
+
+        // get admin 
+        app.get('/admin/:email', async (req, res) => {
+            const email = req.params.email;
+            console.log(email);
+            const query = { email: email };
+            const filter = await usersCollection.findOne(query);
+            console.log(filter);
+            let admin;
+            if (filter?.role == "admin") {
+                admin = true;
+            }
+            else {
+                admin = false;
+            }
+            console.log(admin);
+            res.json({ result: admin })
+        })
+
 
 
     }
